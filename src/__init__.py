@@ -20,6 +20,7 @@ app.config['SECRET_KEY'] = config.get('app', 'SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = config.get('db', 'SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_DATABASE_FILE'] = os.path.join(os.path.abspath(__file__ + '/../'), config.get('db', 'SQLALCHEMY_DATABASE_FILE'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['TOKEN_EXPIRY_MINUTES'] = 30
 
 # Initialise database
 db.init_app(app)

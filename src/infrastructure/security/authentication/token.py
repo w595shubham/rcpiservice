@@ -34,6 +34,6 @@ class Token(Resource):
         result_set = cursor.fetchall()
 
         if result_set.__len__() > 0 and result_set[0].__len__() > 0 and check_password_hash(result_set[0][0], auth.password):
-            token = jwt.encode({'USERNAME': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+            token = jwt.encode({'USERNAME': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=app.config['TOKEN_EXPIRY_MINUTES'])}, app.config['SECRET_KEY'])
             return make_response({'token': token.decode('UTF-8')}, 200, {'WWW-Authenticate': 'Basic realm="Login required!"'})
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
