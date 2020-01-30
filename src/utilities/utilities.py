@@ -1,6 +1,8 @@
 import base64
+import datetime
 import io
 import os
+import sqlite3
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
@@ -9,6 +11,9 @@ from reportlab.lib.units import inch
 from reportlab.lib.utils import ImageReader
 from reportlab.platypus import Flowable
 from reportlab.platypus.para import Paragraph
+
+from src import logger, app
+from src.constants import sql_object
 
 
 def image_to_byte_array(image_uri):
@@ -90,3 +95,19 @@ class flowable_fig(Flowable):
 
     def draw(self):
         self.canv.drawImage(self.img, 0, 0, height=-2.2 * inch, width=4 * inch)
+
+
+def has_user_expired(username):
+    # Check if user is expired or not
+    logger.info("Check if user is expired or not")
+
+    # Create database connection with sqlite database
+    conn = sqlite3.connect(app.config['SQLALCHEMY_DATABASE_FILE'])
+    cursor = conn.cursor()
+    fetch_query = sql_object.GET_USER_DETAIL_BY_NAME.format(username, datetime.datetime.now())
+    logger.info("GET_CAR_PART_CATEGORIES query %s", fetch_query)
+
+    # Execute query and fetch result
+    cursor.execute(fetch_query)
+    result_set = cursor.fetchall()
+    return result_set.__len__() == 0 if True else False

@@ -1,5 +1,6 @@
-import datetime
+import json
 import sqlite3
+from datetime import datetime, timedelta
 
 import jwt
 from flask import Blueprint, request, make_response
@@ -7,6 +8,7 @@ from flask_restplus import Api, Resource
 from werkzeug.security import check_password_hash
 from src import app, logger
 from src.constants import sql_object
+from src.utilities.utilities import has_user_expired
 
 mod = Blueprint('token', __name__)
 auth1 = Api(mod)
@@ -19,6 +21,10 @@ class Token(Resource):
 
         if not auth or not auth.username or not auth.password:
             return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+        # Check if user is not expired
+        if has_user_expired(auth.username):
+            return json.dumps(['user account expired']), 401, {'Content-type': 'application/json'}
 
         # Check if user is expired or not
         logger.info("Check if user is expired or not")
@@ -34,6 +40,6 @@ class Token(Resource):
         result_set = cursor.fetchall()
 
         if result_set.__len__() > 0 and result_set[0].__len__() > 0 and check_password_hash(result_set[0][0], auth.password):
-            token = jwt.encode({'USERNAME': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=app.config['TOKEN_EXPIRY_MINUTES'])}, app.config['SECRET_KEY'])
+            token = jwt.encode({'USERNAME': auth.username, 'exp': datetime.utcnow() + timedelta(minutes=app.config['TOKEN_EXPIRY_MINUTES'])}, app.config['SECRET_KEY'])
             return make_response({'token': token.decode('UTF-8')}, 200, {'WWW-Authenticate': 'Basic realm="Login required!"'})
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
