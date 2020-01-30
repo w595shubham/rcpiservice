@@ -100,14 +100,15 @@ class flowable_fig(Flowable):
 def has_user_expired(username):
     # Check if user is expired or not
     logger.info("Check if user is expired or not")
+    now = datetime.datetime.now()
 
     # Create database connection with sqlite database
     conn = sqlite3.connect(app.config['SQLALCHEMY_DATABASE_FILE'])
     cursor = conn.cursor()
-    fetch_query = sql_object.GET_USER_DETAIL_BY_NAME.format(username, datetime.datetime.now())
-    logger.info("GET_CAR_PART_CATEGORIES query %s", fetch_query)
+    updated_query = sql_object.UPDATE_LAST_ACTIVE_USER_BY_NAME.format(now, username, now)
+    logger.info("UPDATE_LAST_ACTIVE_USER_BY_NAME query %s", updated_query)
 
     # Execute query and fetch result
-    cursor.execute(fetch_query)
-    result_set = cursor.fetchall()
-    return result_set.__len__() == 0 if True else False
+    rows_affected = cursor.execute(updated_query)
+    conn.commit()
+    return rows_affected.rowcount == 0 if True else False
