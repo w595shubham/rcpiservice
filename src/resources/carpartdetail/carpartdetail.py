@@ -60,6 +60,7 @@ class CarPartDetails(Resource):
                     'color': row[9],
                     'price': row[10],
                     'currency': row[11],
+                    'manufacturercode': row[12],
                     # 'imagebytes': image_byte,
                 })
 
@@ -113,6 +114,7 @@ class CarPartDetails(Resource):
                     'color': row[9],
                     'price': row[10],
                     'currency': row[11],
+                    'manufacturercode': row[12],
                     'imagebytes': image_byte,
                 })
 

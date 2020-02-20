@@ -15,3 +15,4 @@ class CarPartDetail(db.Model):
     color = db.Column(db.String(100))
     price = db.Column(db.String(100))
     currency = db.Column(db.String(100))
+    manufacturercode = db.Column(db.String(100))

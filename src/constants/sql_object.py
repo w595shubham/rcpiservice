@@ -10,6 +10,7 @@ GET_CAR_PART_DETAILS_BY_CODE = """SELECT cd.id
                             ,cd.color
                             ,cd.price
                             ,cd.currency
+                            ,cd.manufacturercode
                         FROM carpartcategory cc
                         INNER JOIN carpartdetail cd ON cc.id = cd.category_id
                         WHERE cc.code = '%s'"""
@@ -26,6 +27,7 @@ GET_CAR_PART_DETAILS_BY_ID = """SELECT cd.id
                             ,cd.color
                             ,cd.price
                             ,cd.currency
+                            ,cd.manufacturercode
                         FROM carpartcategory cc
                         INNER JOIN carpartdetail cd ON cc.id = cd.category_id
                         WHERE cd.id = '%s'"""
@@ -137,3 +139,21 @@ UPDATE_LAST_ACTIVE_USER_BY_NAME = """UPDATE userdetail
                                     SET last_active = '{}'
                                     WHERE username = '{}'
                                         AND (expiration_date IS NULL OR strftime('%s', expiration_date) >= strftime('%s', '{}'))"""
+
+GET_CAR_PART_DETAILS_BY_BARCODE = """SELECT id
+                                        ,code
+                                        ,name
+                                        ,display_name
+                                        ,image
+                                        ,(
+                                            SELECT COUNT(1)
+                                            FROM carpartrelationshiphierarchy
+                                            WHERE parent_category_id = cc.id
+                                            ) AS [subcategories]
+                                        ,(
+                                            SELECT COUNT(1)
+                                            FROM carpartdetail
+                                            WHERE cc.id = category_id
+                                            ) AS [variations]
+                                    FROM carpartcategory cc
+                                    WHERE code IN (%s)"""

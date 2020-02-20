@@ -35,7 +35,8 @@ def save_pdf(item, image_byte):
         ['Make', ':', item['make']],
         ['Dimensions', ':', item['dimensions']],
         ['Color', ':', item['color']],
-        ['Price', ':', '$'+item['price']]
+        ['Price', ':', '$'+item['price']],
+        ['Manufacturer Code', ':', item['manufacturercode']]
     ]
 
     from reportlab.platypus import SimpleDocTemplate
@@ -44,7 +45,7 @@ def save_pdf(item, image_byte):
     pdf = SimpleDocTemplate(
         buff,
         title=item['code'],
-        pagesize=(4.55*inch, 5.15*inch),
+        pagesize=(4.55*inch, 5.50*inch),
         leftMargin=.2*inch,
         rightMargin=.2*inch,
         topMargin=.2*inch,
