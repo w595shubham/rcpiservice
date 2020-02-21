@@ -38,9 +38,9 @@ class BarCodeDetection(Resource):
                                               'Access-Control-Allow-Origin': '*',
                                               'Access-Control-Allow-Credentials': 'true', })
 
-            if response.ok:
+            if response.ok and response.text.__len__() > 0:
+                barcode_list = ', '.join('"{0}"'.format(o.strip()) for o in json.loads(response.text))
 
-                code = '"{0}"'.format(response.text[7:14])
                 # Path to sqlite database file
                 database_file = os.path.join(os.path.abspath(__file__ + "/../../../"), 'db.sqlite3')
                 logger.info("Path to sqlite database file: %s", database_file)
@@ -48,7 +48,7 @@ class BarCodeDetection(Resource):
                 # Create database connection with sqlite database
                 conn = sqlite3.connect(database_file)
                 cursor = conn.cursor()
-                fetch_query = sql_object.GET_CAR_PART_DETAILS_BY_BARCODE % code
+                fetch_query = sql_object.GET_CAR_PART_DETAILS_BY_BARCODE % barcode_list
                 logger.info("GET_CAR_PART_DETAILS_BY_BARCODE query %s", fetch_query)
 
                 # Execute query and fetch result
