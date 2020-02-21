@@ -29,14 +29,14 @@ def save_pdf(item, image_byte):
     pdf_elements = []
     # List of Lists
     data = [
-        ['Code', ':', item['code']],
+        ['Component Code', ':', item['code']],
         ['Model No', ':', item['modelno']],
-        ['Manufacturer', ':', item['manufacturer']],
+        ['Manufacturer Code', ':', item['manufacturercode']],
+        # ['Manufacturer', ':', item['manufacturer']],
         ['Make', ':', item['make']],
         ['Dimensions', ':', item['dimensions']],
         ['Color', ':', item['color']],
-        ['Price', ':', '$'+item['price']],
-        ['Manufacturer Code', ':', item['manufacturercode']]
+        ['Price', ':', '$'+item['price']]
     ]
 
     from reportlab.platypus import SimpleDocTemplate
@@ -45,7 +45,7 @@ def save_pdf(item, image_byte):
     pdf = SimpleDocTemplate(
         buff,
         title=item['code'],
-        pagesize=(4.55*inch, 5.50*inch),
+        pagesize=(5.15*inch, 5.50*inch),
         leftMargin=.2*inch,
         rightMargin=.2*inch,
         topMargin=.2*inch,
@@ -95,7 +95,7 @@ class flowable_fig(Flowable):
         self.img = ImageReader(imgdata)
 
     def draw(self):
-        self.canv.drawImage(self.img, 0, 0, height=-2.2 * inch, width=4 * inch)
+        self.canv.drawImage(self.img, 0, 0, height=-2.2 * inch, width=4.6 * inch)
 
 
 def has_user_expired(username):
