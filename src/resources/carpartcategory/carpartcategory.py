@@ -75,7 +75,7 @@ class CarPartCategoryList(Resource):
             token = request.headers.get("authorization", None)
 
             # Make request to image prediction api
-            response = requests.post('http://34.69.19.187:5000/objectdetection/',
+            response = requests.post('http://35.239.91.46:5000/objectdetection/',
                                      files={'file': uploaded_file},
                                      headers={'Authorization': token,
                                               'Access-Control-Allow-Origin': '*',
