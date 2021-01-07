@@ -32,7 +32,7 @@ class BarCodeDetection(Resource):
             uploaded_file = args['file']  # This is FileStorage instance
             token = request.headers.get("authorization", None)
 
-            response = requests.post('http://35.239.91.46:5000/objectdetection/decodebarcode',
+            response = requests.post('http://34.121.155.115:5000/objectdetection/decodebarcode',
                                      files={'file': uploaded_file},
                                      headers={'Authorization': token,
                                               'Access-Control-Allow-Origin': '*',
